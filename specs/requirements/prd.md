@@ -2,7 +2,7 @@
 
 ## Problem Statement
 
-Teams building small demos and integrations often need a trivial, dependable HTTP endpoint to greet a caller by name — useful for smoke-testing new services, pipelines, or client integrations without standing up anything complex. Today they either reach for an ad-hoc script or skip the exercise entirely, losing a quick, consistent way to validate connectivity end to end.
+Teams building small demos and integrations often need a trivial, dependable HTTP endpoint to greet a caller by name — useful for smoke-testing new services, pipelines, or client integrations without standing up anything complex. Today they either reach for an ad-hoc script or skip the exercise entirely, losing a quick, consistent way to validate connectivity end to end. S0 marker s0-p1-1002a.
 
 ## Solution
 
