@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-02T00:00:00Z",
+  "commit": "6ecca942f9686ffb44911d35137e8096cff19aad",
+  "baseUrl": "http://development-default.openchoreoapis.localhost:19080/s0-p1-1002a-greeter-http",
+  "isolation": "the service is stateless and holds no data; each scenario is a single independent GET /hello request asserted only on its own response",
+  "scenarios": [
+    {
+      "feature": "Greeting",
+      "featureFile": "specs/validation/acceptance/greeting.feature",
+      "line": 6,
+      "rule": "The service returns a personalized JSON greeting for a given name",
+      "scenario": "Greeting a named caller",
+      "tags": ["@story-1"],
+      "outcome": "passed",
+      "steps": [
+        { "text": "the greeter service is running", "keyword": "Given",
+          "command": "curl -s -o /dev/null -w '%{http_code}' \"$BASE/hello\"",
+          "exit": 0, "observed": "200" },
+        { "text": "an API Consumer sends a GET request to /hello with name \"Ada\"", "keyword": "When",
+          "command": "curl -s -w '\\nHTTP_STATUS:%{http_code}\\n' \"$BASE/hello?name=Ada\"",
+          "exit": 0, "observed": "HTTP_STATUS:200, body {\"name\":\"Ada\",\"message\":\"Hello, Ada!\"}" },
+        { "text": "the response is a JSON greeting for \"Ada\"", "keyword": "Then",
+          "command": "curl -s \"$BASE/hello?name=Ada\" | jq -e '.name==\"Ada\" and (.message | test(\"Ada\"))'",
+          "exit": 0, "observed": "{\"name\":\"Ada\",\"message\":\"Hello, Ada!\"}" }
+      ],
+      "evidence": {
+        "network": [{ "method": "GET", "url": "/hello?name=Ada", "status": 200 }]
+      }
+    },
+    {
+      "feature": "Greeting",
+      "featureFile": "specs/validation/acceptance/greeting.feature",
+      "line": 14,
+      "rule": "The service returns a default greeting when no name is given",
+      "scenario": "Omitting the name parameter",
+      "tags": ["@story-2"],
+      "outcome": "passed",
+      "steps": [
+        { "text": "the greeter service is running", "keyword": "Given",
+          "command": "curl -s -o /dev/null -w '%{http_code}' \"$BASE/hello\"",
+          "exit": 0, "observed": "200" },
+        { "text": "an API Consumer sends a GET request to /hello with no name parameter", "keyword": "When",
+          "command": "curl -s -w '\\nHTTP_STATUS:%{http_code}\\n' \"$BASE/hello\"",
+          "exit": 0, "observed": "HTTP_STATUS:200, body {\"name\":\"World\",\"message\":\"Hello, World!\"}" },
+        { "text": "the response is a JSON greeting for \"World\"", "keyword": "Then",
+          "command": "curl -s \"$BASE/hello\" | jq -e '.name==\"World\" and (.message | test(\"World\"))'",
+          "exit": 0, "observed": "{\"name\":\"World\",\"message\":\"Hello, World!\"}" }
+      ],
+      "evidence": {
+        "network": [{ "method": "GET", "url": "/hello", "status": 200 }]
+      }
+    },
+    {
+      "feature": "Greeting",
+      "featureFile": "specs/validation/acceptance/greeting.feature",
+      "line": 19,
+      "rule": "The service returns a default greeting when no name is given",
+      "scenario": "Supplying an empty name parameter",
+      "tags": ["@story-2"],
+      "outcome": "passed",
+      "steps": [
+        { "text": "the greeter service is running", "keyword": "Given",
+          "command": "curl -s -o /dev/null -w '%{http_code}' \"$BASE/hello\"",
+          "exit": 0, "observed": "200" },
+        { "text": "an API Consumer sends a GET request to /hello with name \"\"", "keyword": "When",
+          "command": "curl -s -w '\\nHTTP_STATUS:%{http_code}\\n' \"$BASE/hello?name=\"",
+          "exit": 0, "observed": "HTTP_STATUS:200, body {\"name\":\"World\",\"message\":\"Hello, World!\"}" },
+        { "text": "the response is a JSON greeting for \"World\"", "keyword": "Then",
+          "command": "curl -s \"$BASE/hello?name=\" | jq -e '.name==\"World\" and (.message | test(\"World\"))'",
+          "exit": 0, "observed": "{\"name\":\"World\",\"message\":\"Hello, World!\"}" }
+      ],
+      "evidence": {
+        "network": [{ "method": "GET", "url": "/hello?name=", "status": 200 }]
+      }
+    }
+  ]
+}
